@@ -11,7 +11,7 @@ export class FindUserInteractor implements FindUserUseCase{
         this.userPersistencePort= new UserRepositoryPostgres();
     }
 
-    async findUser(createUserInput: CreateUserInput): Promise<CreateUserInput> {
+    async findUser(createUserInput: CreateUserInput): Promise<User | undefined> {
 
         const user:User = new User();
         user.email = createUserInput.email
@@ -19,7 +19,15 @@ export class FindUserInteractor implements FindUserUseCase{
         user.nome = createUserInput.nome
         user.senha = createUserInput.senha
 
-        throw new Error("Method not implemented.");
+        if(user.email === undefined){
+            throw new Error("favor informar email");
+        }
+
+        let userEncontrado = await this.userPersistencePort.findByEmail(user.email);
+        
+        return userEncontrado;
+         
+
     }
 
 }

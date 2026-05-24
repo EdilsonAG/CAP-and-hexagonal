@@ -42,8 +42,17 @@ export class UserRepositoryPostgres implements UserPersistencePort {
         }
     }
 
-    findByEmail(id: String): Promise<User | undefined> {
-        throw new Error("Method not implemented.");
+    async findByEmail(email: String): Promise<User | undefined> {
+        try {
+             const result: User = await this.db.run(
+                cds.ql.SELECT.one.from('app.User').where({ email: email })
+             )
+             if (!result) return undefined;
+
+            return result;
+        } catch (error:any) {
+            throw new Error(`Erro ao buscar usuário: ${error.message}`);
+        }
     }
 
 }
