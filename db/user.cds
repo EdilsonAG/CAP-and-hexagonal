@@ -7,6 +7,7 @@ entity User : managed {
     nome: String not null;
     email: String not null;
     senha: String not null;
+
  }
 
 

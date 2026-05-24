@@ -44,7 +44,8 @@ export class UserRepositoryPostgres implements UserPersistencePort {
 
     async findByEmail(email: String): Promise<User | undefined> {
         try {
-             const result: User = await this.db.run(
+            const db = await cds.connect.to('db');
+             const result: User = await db.run(
                 cds.ql.SELECT.one.from('app.User').where({ email: email })
              )
              if (!result) return undefined;
