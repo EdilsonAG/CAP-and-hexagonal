@@ -15,7 +15,6 @@ export class ProductHandler {
 
     registerHandlers(srv: any): void {
         srv.on('CREATE', 'Products', async (req: any) => {
-
             try {
                 // chamar use case
                 const id = await this.createProductUseCase.createProduct(req.data);
