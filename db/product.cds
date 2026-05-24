@@ -6,5 +6,6 @@ entity Product : managed {
   key  id: Integer;
   descricaoProduto: String not null;
   nomeProduto: String;
-  preco: Integer
+  preco: Integer;
+  imagem: String;
  }

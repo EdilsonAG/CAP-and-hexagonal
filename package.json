@@ -7,6 +7,7 @@
     "@cap-js/postgres": "^2.3.0",
     "@sap/cds": "^9.9.1",
     "@sap/xssec": "^4.13.0",
+    "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
@@ -16,6 +17,7 @@
   },
   "devDependencies": {
     "@cap-js/sqlite": "^2",
+    "@types/bcrypt": "^6.0.0",
     "@types/node": "^25.9.1",
     "ts-node": "^10.9.2",
     "tsx": "^4.22.3",
@@ -40,6 +42,13 @@
           "user": "postgres",
           "password": "postgres123",
           "database": "projetov1"
+        }
+      }
+    },
+    "migrations": {
+      "db": {
+        "tenant": {
+          "prefix": "cds_migrations"
         }
       }
     }

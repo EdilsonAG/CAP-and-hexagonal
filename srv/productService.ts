@@ -1,5 +1,5 @@
 import  cds  from '@sap/cds';
-import { ProductHandler } from './infrastructure/web/controller/ProductController';
+import { ProductHandler } from './modules/product/infrastructure/web/controller/ProductController';
  
 
 export default cds.service.impl((srv) => {

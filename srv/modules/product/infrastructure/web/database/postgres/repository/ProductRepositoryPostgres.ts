@@ -8,8 +8,7 @@ export class ProductRepositoryPostgres implements ProductPersistencePort {
     async create(produto: Product): Promise<String | undefined> {
 
         try {
-          
-
+        
             const result: Product = await this.db.run(
                 cds.ql.INSERT.into('app.Product').entries({
                     id: produto.id,
