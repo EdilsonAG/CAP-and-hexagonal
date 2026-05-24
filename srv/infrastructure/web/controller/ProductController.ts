@@ -1,12 +1,16 @@
 import { CreateProductUseCase } from "../../../application/ports/inbound/CreateProductUseCase";
-import { createProductInteractor } from "../../../application/use-cases/product/createProductInteractor";
+import { ProductPersistencePort } from "../../../application/ports/outbound/ProductPersistencePort";
+import { CreateProductInteractor } from "../../../application/use-cases/product/createProductInteractor";
+import { ProductRepositoryPostgres } from "../database/postgres/repository/ProductRepositoryPostgres";
 
 export class ProductHandler {
 
     private createProductUseCase: CreateProductUseCase;
-
+ 
     constructor() {
-        this.createProductUseCase = new createProductInteractor();
+        let productRepositoryPostgres = new ProductRepositoryPostgres();
+        this.createProductUseCase = new CreateProductInteractor(productRepositoryPostgres);
+      
     }
 
     registerHandlers(srv: any): void {
@@ -14,7 +18,7 @@ export class ProductHandler {
 
             try {
                 // chamar use case
-                const id = this.createProductUseCase.createProduct(req.data);
+                const id = await this.createProductUseCase.createProduct(req.data);
                 return { ID: id, ...req.data };
             } catch (error: any) {
                 req.error(400, error.message)

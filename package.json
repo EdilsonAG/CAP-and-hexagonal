@@ -17,6 +17,7 @@
     "@cap-js/sqlite": "^2",
     "@types/node": "^25.9.1",
     "ts-node": "^10.9.2",
+    "tsx": "^4.22.3",
     "typescript": "^6.0.3"
   },
   "scripts": {
@@ -31,12 +32,13 @@
     "requires": {
       "db": {
         "kind": "postgres",
+        "impl": "@cap-js/postgres",
         "credentials": {
           "host": "localhost",
           "port": 5432,
           "user": "postgres",
           "password": "postgres123",
-          "database": "altass_cookies"
+          "database": "projetov1"
         }
       }
     }

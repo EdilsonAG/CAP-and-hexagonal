@@ -6,18 +6,18 @@ import { CreateProductInput } from "../../dto/CreateProductInput";
 import { CreateProductUseCase } from "../../ports/inbound/CreateProductUseCase";
 import { ProductPersistencePort } from "../../ports/outbound/ProductPersistencePort";
 
-export class createProductInteractor implements CreateProductUseCase{
+export class CreateProductInteractor implements CreateProductUseCase{
 
     private productPricingDomainService: ProductPricingDomainService;
     private productPersistencePort:ProductPersistencePort
 
-    constructor(){
-        this.productPersistencePort = new ProductRepositoryPostgres();
+    constructor(productRepositoryPostgres:ProductRepositoryPostgres){
+        this.productPersistencePort = productRepositoryPostgres;
         this.productPricingDomainService= new ProductPricingDomainService();
         
     }
 
-    createProduct(createProductInput: CreateProductInput): CreateProductInput {
+    async createProduct(createProductInput: CreateProductInput): Promise<CreateProductInput>  {
 
         let product = new Product();
 
@@ -26,7 +26,7 @@ export class createProductInteractor implements CreateProductUseCase{
         product.nomeProduto = createProductInput.nomeProduto
         product.preco = createProductInput.preco;
 
-        let productPrecificado  = this.productPricingDomainService.precingProduct(product);
+        let productPrecificado  =  this.productPricingDomainService.precingProduct(product);
 
         let createProduct = new CreateProductInput();
         createProduct.descricaoProduto = productPrecificado?.descricaoProduto;
@@ -35,7 +35,7 @@ export class createProductInteractor implements CreateProductUseCase{
         createProduct.preco = productPrecificado?.preco
 
 
-        this.productPersistencePort.create(product);
+        await this.productPersistencePort.create(product);
 
 
         return createProduct;
