@@ -4,6 +4,7 @@ import cds from '@sap/cds';
 
 
 export class UserRepositoryPostgres implements UserPersistencePort {
+    
 
 
     private db = cds.db
@@ -39,6 +40,10 @@ export class UserRepositoryPostgres implements UserPersistencePort {
         } catch (error: any) {
             throw new Error(`Erro ao buscar usuário: ${error.message}`);
         }
+    }
+
+    findByEmail(id: String): Promise<User | undefined> {
+        throw new Error("Method not implemented.");
     }
 
 }
