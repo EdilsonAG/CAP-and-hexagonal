@@ -1,5 +1,6 @@
 import { Perfil } from "../../../domain/user/entity/Perfil";
+import { User } from "../../../domain/user/entity/User";
 
-export interface CreatePerfilInteractor{
+export interface CreatePerfilUseCase{
     setPerfilToUser(user:User):void
 }
