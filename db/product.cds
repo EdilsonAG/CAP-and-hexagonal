@@ -1,6 +1,6 @@
+namespace app;
 using { managed } from '@sap/cds/common';
 
-namespace app;
 
 entity Product : managed {
   key  id: Integer;

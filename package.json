@@ -36,6 +36,7 @@
       "db": {
         "kind": "postgres",
         "impl": "@cap-js/postgres",
+        "migrate": true,
         "credentials": {
           "host": "localhost",
           "port": 5432,

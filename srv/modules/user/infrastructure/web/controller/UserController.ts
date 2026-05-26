@@ -14,6 +14,7 @@ export class UserController{
         srv.on('CREATE', 'User', async (req: any) => {
             try {
                 // chamar use case
+                console.log(req.data)
                 const id = await this.createUserUseCase.createUser(req.data);
                 return { ID: id, ...req.data };
             } catch (error: any) {
