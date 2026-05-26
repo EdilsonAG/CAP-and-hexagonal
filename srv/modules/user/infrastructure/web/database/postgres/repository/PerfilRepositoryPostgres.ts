@@ -6,24 +6,21 @@ export class PerfilRepositoryPostgres implements PerfilPersistencePort {
 
     async createPerfil(perfil: Perfil): Promise<void> {
         try {
-
             const db = await cds.connect.to('db');
+            console.log(perfil.descricao)
 
-            const result: Perfil = await db.run(
-                cds.ql.INSERT.into('app.Perfil').entries({
+            // ✅ cds.entities() em vez de db.entities()
+            const { Perfil: PerfilEntity } = cds.entities('app');
 
+            await db.run(
+                cds.ql.INSERT.into("app.Perfil").entries({
                     descricao: perfil.descricao,
                     permissao: perfil.permissao,
-                    user: perfil.user
+                    user: perfil.user,
                 })
-            )
-
+            );
         } catch (error: any) {
-
-            throw new Error(`Erro ao criar usuário: ${error.message}`);
+            throw new Error(`Erro ao criar perfil: ${error.message}`);
         }
     }
-
 }
-
-

@@ -32,9 +32,9 @@ export class CreateUserInteractor implements CreateUserUseCase{
         createUserInput.senha = newPass
         user.senha = newPass;
 
+        await this.userPersistencePort.create(user)
         await this.createPerfilInteractor.setPerfilToUser(user);
 
-        await this.userPersistencePort.create(user)
 
         return createUserInput;
     }

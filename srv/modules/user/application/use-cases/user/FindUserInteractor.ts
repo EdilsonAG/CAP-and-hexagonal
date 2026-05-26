@@ -13,6 +13,8 @@ export class FindUserInteractor implements FindUserUseCase{
         this.userPersistencePort= new UserRepositoryPostgres();
     }
 
+    
+
     async findUser(LoginUserInput: LoginUserInput): Promise<User | undefined> {
 
         const user:User = new User();

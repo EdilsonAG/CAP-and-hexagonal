@@ -3,10 +3,16 @@ import { Permissao } from "./Permissao"
 
 
 export class Perfil{
-   
+    private _id: Number | undefined;
     private _descricao: String | undefined;
     private _permissao: Permissao | undefined;
     private _user: User | undefined;
+    public get id(): Number | undefined{
+        return this._id;
+    }
+    public set id(value: Number) {
+        this._id = value;
+    }
 
 
     public get descricao(): String | undefined{
