@@ -3,7 +3,15 @@ export class CreateProductInput {
     private _descricaoProduto: string | undefined;
     private _nomeProduto: string | undefined;
     private _preco: number | undefined;
+    private _imagem: String | undefined; 
+
     
+    public get imagem(): String | undefined {
+        return this._imagem;
+    }
+    public set imagem(value: String | undefined) {
+        this._imagem = value;
+    }
     public get preco(): number | undefined {
         return this._preco;
     }

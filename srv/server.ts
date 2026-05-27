@@ -14,7 +14,7 @@ import { PerfilRepositoryPostgres } from "./modules/user/infrastructure/web/data
 
 cds.on('bootstrap', (app) => {
     const findUserByEmail = new FindUserInteractor();
-    const perfilRepositoryPostgres = new PerfilRepositoryPostgres(); 
+    const perfilRepositoryPostgres = new PerfilRepositoryPostgres();
     // Necessário para ler o body JSON
     app.use(require('express').json());
 
@@ -37,14 +37,20 @@ cds.on('bootstrap', (app) => {
 
         jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
             if (err) {
+                console.log("❌ Token inválido:", err.message);
                 req.user = new cds.User.Anonymous();
                 return next();
             }
-            req.user = new cds.User({
-                id: decoded.sub,
-                roles: decoded.roles ?? [],
-                attr: { id: decoded.id }
-            })
+            console.log("✅ Token decodificado:", decoded);
+            console.log("✅ Token decodificado:", decoded);
+
+            const user = new cds.User(decoded.sub);
+            user._roles = decoded.roles ?? [];      
+            user.attr = { id: decoded.id };
+            req.user = user;
+            
+            console.log("✅ req.user montado:", req.user);
+            console.log("✅ req.user._roles", req.user._roles);
             return next();
         })
 
@@ -54,56 +60,56 @@ cds.on('bootstrap', (app) => {
         //const { user, pass } = req.body
         //const users = USERS.find(u => u.user === user && u.pass === pass)
 
-        try{
-        const { email, senha } = req.body;
+        try {
+            const { email, senha } = req.body;
 
-        // monta o input
-        const loginInput = new LoginUserInput();
-        loginInput.email = email;
-        loginInput.senha = senha;
+            // monta o input
+            const loginInput = new LoginUserInput();
+            loginInput.email = email;
+            loginInput.senha = senha;
 
-        const usuarioEncontrado = await findUserByEmail.findUser(loginInput)
+            const usuarioEncontrado = await findUserByEmail.findUser(loginInput)
 
-        if(usuarioEncontrado === undefined){
-            throw new Error("usuário não encontrado")
-        }
-
-        const perfilEncontrado = await perfilRepositoryPostgres.findPerfilByUser(usuarioEncontrado);
-        console.log("usuário encontrado")
-        //const usuarioNew = new User();
-        // usuarioEncontrado.then((e) => {
-        //     usuarioNew.email = e?.email;
-        //     usuarioNew.senha = e?.senha;
-        //     usuarioNew.id = e?.id;
-        //     usuarioNew.nome = e?.nome;
-        // })
-
-        //const users = await findUserByEmail.findUser(req.data)
-
-        console.log("perfil encontrado "+perfilEncontrado)
-        if (!usuarioEncontrado || !perfilEncontrado) return res.status(401).json({ message: "credenciais invalidas" })
-        console.log("chegou aqui")
-        const token = jwt.sign(
-            {
-                id: usuarioEncontrado.id?.toString(),
-                grant: perfilEncontrado.permissao
-
-            },
-            // chave privada
-            //privateKey,
-            process.env.JWT_SECRET,
-
-            {
-                //algorithm: 'RS256',  vou implementar com chave
-                subject: usuarioEncontrado.id,          // claim "sub"
-                issuer: 'minha-api',       // claim "iss"
-                expiresIn: '1h',
+            if (usuarioEncontrado === undefined) {
+                throw new Error("usuário não encontrado")
             }
-        );
-        res.json({ access_token: token, })
-    }catch(err: any){
-        return res.status(401).json({ message: err.message });
-    }
+
+            const perfilEncontrado = await perfilRepositoryPostgres.findPerfilByUser(usuarioEncontrado);
+            console.log("usuário encontrado")
+            //const usuarioNew = new User();
+            // usuarioEncontrado.then((e) => {
+            //     usuarioNew.email = e?.email;
+            //     usuarioNew.senha = e?.senha;
+            //     usuarioNew.id = e?.id;
+            //     usuarioNew.nome = e?.nome;
+            // })
+
+            //const users = await findUserByEmail.findUser(req.data)
+
+            console.log("perfil encontrado " + perfilEncontrado)
+            if (!usuarioEncontrado || !perfilEncontrado) return res.status(401).json({ message: "credenciais invalidas" })
+            console.log("chegou aqui")
+            const token = jwt.sign(
+                {
+                    id: usuarioEncontrado.id?.toString(),
+                    roles: [perfilEncontrado.permissao],
+
+                },
+                // chave privada
+                //privateKey,
+                process.env.JWT_SECRET,
+
+                {
+                    //algorithm: 'RS256',  vou implementar com chave
+                    subject: usuarioEncontrado.id,          // claim "sub"
+                    issuer: 'minha-api',       // claim "iss"
+                    expiresIn: '1h',
+                }
+            );
+            res.json({ access_token: token, })
+        } catch (err: any) {
+            return res.status(401).json({ message: err.message });
+        }
     })
 
 

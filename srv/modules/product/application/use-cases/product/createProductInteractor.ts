@@ -26,6 +26,8 @@ export class CreateProductInteractor implements CreateProductUseCase{
         product.nomeProduto = createProductInput.nomeProduto
         product.preco = createProductInput.preco;
 
+        console.log("createProductInput "+createProductInput)
+
         let productPrecificado  =  this.productPricingDomainService.precingProduct(product);
 
         let createProduct = new CreateProductInput();
