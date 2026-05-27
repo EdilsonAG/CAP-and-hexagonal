@@ -42,7 +42,7 @@ export class CreatePerfilInteractor implements CreatePerfilUseCase{
         perfil.permissao = Permissao.user
 
         console.log("ir criar o perfil")
-        this.perfilPersistencePort.createPerfil(perfil);
+        await this.perfilPersistencePort.createPerfil(perfil);
 
     }
 

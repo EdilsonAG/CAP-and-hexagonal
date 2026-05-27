@@ -8,15 +8,22 @@ export class PerfilRepositoryPostgres implements PerfilPersistencePort {
         try {
             const db = await cds.connect.to('db');
             console.log(perfil.descricao)
+            console.log("id user " + perfil.user?.id)
 
-            // ✅ cds.entities() em vez de db.entities()
-            const { Perfil: PerfilEntity } = cds.entities('app');
+            console.log("\n\n")
+            console.log("permissao")
+            console.log(typeof perfil.permissao)
+            console.log(perfil.permissao)
+
+            const { Perfil } = cds.entities('app');
+
+
 
             await db.run(
-                cds.ql.INSERT.into("app.Perfil").entries({
+                cds.ql.INSERT.into('app.Perfil').entries({
                     descricao: perfil.descricao,
-                    permissao: perfil.permissao,
-                    user: perfil.user,
+                    permissao: String(perfil.permissao),
+                    user_id: perfil.user?.id,
                 })
             );
         } catch (error: any) {
