@@ -8,10 +8,13 @@ import { FindUserInteractor } from "./modules/user/application/use-cases/user/Fi
 import { User } from "./modules/user/domain/user/entity/User";
 import { json } from "stream/consumers";
 import { LoginUserInput } from "./modules/user/application/dto/LoginUserInput";
+import { UserRepositoryPostgres } from "./modules/user/infrastructure/web/database/postgres/repository/UserRepositoryPostgres";
+import { PerfilRepositoryPostgres } from "./modules/user/infrastructure/web/database/postgres/repository/PerfilRepositoryPostgres";
 
 
 cds.on('bootstrap', (app) => {
     const findUserByEmail = new FindUserInteractor();
+    const perfilRepositoryPostgres = new PerfilRepositoryPostgres(); 
     // Necessário para ler o body JSON
     app.use(require('express').json());
 
@@ -60,6 +63,12 @@ cds.on('bootstrap', (app) => {
         loginInput.senha = senha;
 
         const usuarioEncontrado = await findUserByEmail.findUser(loginInput)
+
+        if(usuarioEncontrado === undefined){
+            throw new Error("usuário não encontrado")
+        }
+
+        const perfilEncontrado = await perfilRepositoryPostgres.findPerfilByUser(usuarioEncontrado);
         console.log("usuário encontrado")
         //const usuarioNew = new User();
         // usuarioEncontrado.then((e) => {
@@ -71,12 +80,13 @@ cds.on('bootstrap', (app) => {
 
         //const users = await findUserByEmail.findUser(req.data)
 
-
-        if (!usuarioEncontrado) return res.status(401).json({ message: "credenciais invalidas" })
+        console.log("perfil encontrado "+perfilEncontrado)
+        if (!usuarioEncontrado || !perfilEncontrado) return res.status(401).json({ message: "credenciais invalidas" })
         console.log("chegou aqui")
         const token = jwt.sign(
             {
                 id: usuarioEncontrado.id?.toString(),
+                grant: perfilEncontrado.permissao
 
             },
             // chave privada

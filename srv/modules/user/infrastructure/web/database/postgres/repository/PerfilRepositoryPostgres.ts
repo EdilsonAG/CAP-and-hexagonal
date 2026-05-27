@@ -1,6 +1,7 @@
 import { PerfilPersistencePort } from "../../../../../application/ports/outbound/PerfilPersistencePort";
 import { Perfil } from "../../../../../domain/user/entity/Perfil";
 import cds from '@sap/cds';
+import { User } from "../../../../../domain/user/entity/User";
 
 export class PerfilRepositoryPostgres implements PerfilPersistencePort {
 
@@ -28,6 +29,21 @@ export class PerfilRepositoryPostgres implements PerfilPersistencePort {
             );
         } catch (error: any) {
             throw new Error(`Erro ao criar perfil: ${error.message}`);
+        }
+    }
+
+    async findPerfilByUser(user: User): Promise<Perfil | undefined> {
+        try {
+            console.log("findPerfilByUser "+ user.id)
+            const db = await cds.connect.to("db");
+
+            const perfil: Perfil = await db.run(
+                cds.ql.SELECT.one.from('app.Perfil').where({ user_id: user.id })
+            )
+            console.log("perfil encontrado: "+perfil)
+            return perfil;
+        } catch (error) {
+
         }
     }
 }
