@@ -25,4 +25,22 @@ export class ProductRepositoryPostgres implements ProductPersistencePort {
 
     }
 
+    public async findProductById(idProduct:String): Promise<Product | undefined>{
+        try {
+            const db = await cds.connect.to("db")
+            const result = await db.run(
+                cds.ql.SELECT.one.from("app.Product").where({ id: idProduct })
+            )
+            if (!result){
+                throw new Error("produto não encontrado")
+            }
+            return result
+        } catch (error) {
+            
+        }
+    }
+
+
+ 
+
 }
