@@ -13,7 +13,7 @@ export class CreateUserInteractor implements CreateUserUseCase{
     private userCryptService:UserCryptService;
     private userPersistencePort:UserPersistencePort;
     private createPerfilInteractor:CreatePerfilUseCase;
-    private carrinhoService: CarrinhoCreateDomainService
+    private carrinhoService: CarrinhoCreateDomainService;
 
     constructor(){
        this.userPersistencePort= new UserRepositoryPostgres();
@@ -37,6 +37,8 @@ export class CreateUserInteractor implements CreateUserUseCase{
 
         await this.userPersistencePort.create(user)
         await this.createPerfilInteractor.setPerfilToUser(user);
+        console.log("antes de entrar em createCarrinho")
+        console.log(user.email)
         await this.carrinhoService.createCarrinho(user);
 
 

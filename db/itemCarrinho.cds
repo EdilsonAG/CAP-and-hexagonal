@@ -2,8 +2,9 @@
 
 namespace app;
 using { cuid, managed } from '@sap/cds/common';
-using { app.Carrinho } from './Carrinho'
-using { app.Product } from './product';
+ using { app.Product } from './product';
+using { app.Carrinho } from './Carrinho';  
+
 
 
 entity ItemCarrinho {
