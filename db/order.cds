@@ -4,7 +4,7 @@ using { app.User }   from './user';
 
 
 entity Order : managed {
-  key  id: Integer;
+  key  id: UUID;
   nomeOrdem: String;
   usuario : Association to User; 
  }

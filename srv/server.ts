@@ -41,16 +41,16 @@ cds.on('bootstrap', (app) => {
                 req.user = new cds.User.Anonymous();
                 return next();
             }
-            console.log("✅ Token decodificado:", decoded);
-            console.log("✅ Token decodificado:", decoded);
+            console.log(" Token decodificado:", decoded);
+            console.log(" Token decodificado:", decoded);
 
             const user = new cds.User(decoded.sub);
             user._roles = decoded.roles ?? [];      
             user.attr = { id: decoded.id };
             req.user = user;
             
-            console.log("✅ req.user montado:", req.user);
-            console.log("✅ req.user._roles", req.user._roles);
+            console.log(" req.user montado:", req.user);
+            console.log(" req.user._roles", req.user._roles);
             return next();
         })
 
