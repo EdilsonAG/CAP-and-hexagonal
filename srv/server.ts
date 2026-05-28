@@ -18,9 +18,7 @@ cds.on('bootstrap', (app) => {
     // Necessário para ler o body JSON
     app.use(require('express').json());
 
-    //simulando banco de dadados, 
-    const USERS = [{ id: 1, user: "ed", pass: "123", roles: ["admin"] }]
-
+    
     async function jwt_auth(
         req: Request,
         res: Response,
@@ -30,14 +28,15 @@ cds.on('bootstrap', (app) => {
         const token = authHeader?.split(' ')[1]
 
         if (!token) {
-            // ✅ Sem token: usuário anônimo, deixa o CAP decidir
+            // usuário anonimo deixa o CAP decidir
+            console.log("rotas sem accestoken")
             req.user = new cds.User.Anonymous();
             return next();
         }
 
         jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
             if (err) {
-                console.log("❌ Token inválido:", err.message);
+                console.log("Token inválido:", err.message);
                 req.user = new cds.User.Anonymous();
                 return next();
             }
@@ -96,13 +95,13 @@ cds.on('bootstrap', (app) => {
 
                 },
                 // chave privada
-                //privateKey,
+               
                 process.env.JWT_SECRET,
 
                 {
                     //algorithm: 'RS256',  vou implementar com chave
                     subject: usuarioEncontrado.id,          // claim "sub"
-                    issuer: 'minha-api',       // claim "iss"
+                    issuer: 'minha-api',       // clam "iss"
                     expiresIn: '1h',
                 }
             );

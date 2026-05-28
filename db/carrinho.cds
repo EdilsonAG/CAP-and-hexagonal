@@ -10,3 +10,4 @@ entity Carrinho {
         //   usar composition para array e também por conta do ciclo de vida em cascata
         itens       : Composition of many ItemCarrinho on itens.carrinho = $self;
 }
+ 
