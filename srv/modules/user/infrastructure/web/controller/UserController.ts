@@ -2,11 +2,11 @@ import { CreateUserUseCase } from "../../../application/ports/inbound/CreateUser
 import { CreateUserInteractor } from "../../../application/use-cases/user/CreateUserInteractor";
 
 
-export class UserController{
+export class UserController {
 
-    private createUserUseCase:CreateUserUseCase;
+    private createUserUseCase: CreateUserUseCase;
 
-    constructor(){
+    constructor() {
         this.createUserUseCase = new CreateUserInteractor();
     }
 
@@ -20,6 +20,12 @@ export class UserController{
             } catch (error: any) {
                 req.error(400, error.message)
             }
-        })
+        },
+            // srv.before('READ', 'User', (req) => {
+            //     if (!req.user || req.user.is('anonymous')) {
+            //         return req.reject(401, 'Autenticação necessária');
+            //     }
+            // }))
+        ) 
     }
 }

@@ -15,9 +15,13 @@ import { PerfilRepositoryPostgres } from "./modules/user/infrastructure/web/data
 cds.on('bootstrap', (app) => {
     const findUserByEmail = new FindUserInteractor();
     const perfilRepositoryPostgres = new PerfilRepositoryPostgres();
-    // Necessário para ler o body JSON
-    app.use(require('express').json());
+     app.use(require('express').json());
 
+    const PUBLIC_ROUTES = [
+        { method: 'GET', path: '/v4/catalog/Products' },
+    ];
+
+  
 
     async function jwt_auth(
         req: Request,
@@ -26,14 +30,14 @@ cds.on('bootstrap', (app) => {
     ) {
         const authHeader = req.headers.authorization;
         const token = authHeader?.split(' ')[1]
+        console.log(req.path)
+       const isPublic = PUBLIC_ROUTES.some(
+            (r) => r.method === req.method && req.path.startsWith(r.path)
+        );
 
-        if (!token) {
-            // usuário anonimo deixa o CAP decidir
-            console.log("rotas sem accestoken")
-            req.user = new cds.User.Anonymous();
+        if (isPublic) {
+            req.user = new cds.User('anonymous');
             return next();
-
-
         }
 
         jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
@@ -123,3 +127,60 @@ cds.on('bootstrap', (app) => {
 }
 )
 
+// require('dotenv').config();
+// const cds = require('@sap/cds');
+// const jwt = require('jsonwebtoken');
+// import { Request, Response } from 'express';
+// import { FindUserInteractor } from "./modules/user/application/use-cases/user/FindUserInteractor";
+// import { LoginUserInput } from "./modules/user/application/dto/LoginUserInput";
+// import { PerfilRepositoryPostgres } from "./modules/user/infrastructure/web/database/postgres/repository/PerfilRepositoryPostgres";
+
+// cds.on('bootstrap', (app) => {
+//     const findUserByEmail = new FindUserInteractor();
+//     const perfilRepositoryPostgres = new PerfilRepositoryPostgres();
+    
+//     app.use(require('express').json());
+
+//     // Só sobrou o /login — o resto o CAP gerencia
+//     app.post('/login', async (req: Request, res: Response) => {
+//         try {
+//             const { email, senha } = req.body;
+
+//             const loginInput = new LoginUserInput();
+//             loginInput.email = email;
+//             loginInput.senha = senha;
+
+//             const usuarioEncontrado = await findUserByEmail.findUser(loginInput);
+
+//             if (!usuarioEncontrado) {
+//                 throw new Error("Usuário não encontrado");
+//             }
+
+//             const perfilEncontrado = await perfilRepositoryPostgres.findPerfilByUser(usuarioEncontrado);
+
+//             if (!perfilEncontrado) {
+//                 return res.status(401).json({ message: "Credenciais inválidas" });
+//             }
+
+//             const token = jwt.sign(
+//                 {
+//                     id: usuarioEncontrado.id?.toString(),
+//                     roles: [perfilEncontrado.permissao],
+//                 },
+//                 process.env.JWT_SECRET,
+//                 {
+//                     subject: usuarioEncontrado.id,
+//                     issuer: 'minha-api',
+//                     expiresIn: '1h',
+//                 }
+//             );
+
+//             res.json({ access_token: token });
+
+//         } catch (err: any) {
+//             return res.status(401).json({ message: err.message });
+//         }
+//     });
+
+//     // Removido: PUBLIC_ROUTES, isPublicRoute, jwt_auth, app.use('/odata', jwt_auth)
+// });

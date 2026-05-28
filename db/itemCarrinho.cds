@@ -12,4 +12,4 @@ entity ItemCarrinho {
         carrinho    : Association to one Carrinho;
         produto     : Association to one Product;
         quantidade  : Integer;
-}
+} 
