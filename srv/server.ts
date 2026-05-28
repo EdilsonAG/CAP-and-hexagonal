@@ -18,7 +18,7 @@ cds.on('bootstrap', (app) => {
     // Necessário para ler o body JSON
     app.use(require('express').json());
 
-    
+
     async function jwt_auth(
         req: Request,
         res: Response,
@@ -32,22 +32,29 @@ cds.on('bootstrap', (app) => {
             console.log("rotas sem accestoken")
             req.user = new cds.User.Anonymous();
             return next();
+
+
         }
 
         jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
             if (err) {
-                console.log("Token inválido:", err.message);
-                req.user = new cds.User.Anonymous();
-                return next();
+                if (err.name === 'TokenExpiredError') {
+                    return res.status(401).json({ message: 'Token expirado, faça login novamente' });
+                }
+                return res.status(401).json({ message: 'Token inválido' });
             }
+
             console.log(" Token decodificado:", decoded);
             console.log(" Token decodificado:", decoded);
 
+
+
             const user = new cds.User(decoded.sub);
-            user._roles = decoded.roles ?? [];      
+            user._roles = decoded.roles ?? [];
             user.attr = { id: decoded.id };
             req.user = user;
-            
+
+
             console.log(" req.user montado:", req.user);
             console.log(" req.user._roles", req.user._roles);
             return next();
@@ -95,7 +102,7 @@ cds.on('bootstrap', (app) => {
 
                 },
                 // chave privada
-               
+
                 process.env.JWT_SECRET,
 
                 {

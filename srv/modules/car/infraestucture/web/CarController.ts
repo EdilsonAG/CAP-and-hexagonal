@@ -1,5 +1,6 @@
 import { AddItemCarUseCase } from "../../application/port/inbound/AddItemCarUseCase";
 import { AddItemCarInteractor } from "../../application/use-case/addItemCarInteractor";
+const jwt = require('jsonwebtoken');
 
 export class CarController {
 
@@ -10,15 +11,17 @@ export class CarController {
     }
 
     registerHandlers(srv: any): void {
-        srv.on('AddItemCarUseCase', async (req: any) => {
+        srv.on('addItemCarrinho', async (req: any) => {
             try {
                 const { quantidade, idProduto } = req.data;
-                const userId = req.user.attr.id;
-
-
-                console.log(req.data)
-                const id = await this.addItemCarUseCase.addItemCar(quantidade,idProduto, userId);
-                return { ID: id, ...req.data };
+                const accestoken = req.headers.authorization?.split(' ')[1]
+                const decoded = jwt.decode(accestoken);
+              
+               
+                const idUser = decoded.id
+               
+                const id = await this.addItemCarUseCase.addItemCar(quantidade,idProduto, idUser);
+                //return { ID: id, ...req.data };
             } catch (error: any) {
                 req.error(400, error.message)
             }
