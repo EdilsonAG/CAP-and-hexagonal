@@ -21,7 +21,7 @@ export class CreatePerfilInteractor implements CreatePerfilUseCase{
 
     
 
-    async setPerfilToUser(user:User):Promise <void>{
+    public async  setPerfilToUser(user:User):Promise <void>{
         const perfil:Perfil = new Perfil();
 
         if(user.email === undefined || user === undefined){

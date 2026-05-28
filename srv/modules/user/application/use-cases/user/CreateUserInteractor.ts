@@ -1,3 +1,4 @@
+ import { CarrinhoCreateDomainService } from "../../../../car/domain/service/CarrinhoCreateDomainService";
 import { User } from "../../../domain/user/entity/User";
 import { UserCryptService } from "../../../domain/user/service/UserCryptService";
 import { UserRepositoryPostgres } from "../../../infrastructure/web/database/postgres/repository/UserRepositoryPostgres";
@@ -12,11 +13,13 @@ export class CreateUserInteractor implements CreateUserUseCase{
     private userCryptService:UserCryptService;
     private userPersistencePort:UserPersistencePort;
     private createPerfilInteractor:CreatePerfilUseCase;
+    private carrinhoService: CarrinhoCreateDomainService
 
     constructor(){
        this.userPersistencePort= new UserRepositoryPostgres();
        this.userCryptService = new UserCryptService();
        this.createPerfilInteractor = new CreatePerfilInteractor();
+       this.carrinhoService = new CarrinhoCreateDomainService();
     }
 
     async createUser(createUserInput: CreateUserInput): Promise<CreateUserInput> {
@@ -34,6 +37,7 @@ export class CreateUserInteractor implements CreateUserUseCase{
 
         await this.userPersistencePort.create(user)
         await this.createPerfilInteractor.setPerfilToUser(user);
+        await this.carrinhoService.createCarrinho(user);
 
 
         return createUserInput;
