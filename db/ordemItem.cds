@@ -11,3 +11,4 @@ entity OrderItem : managed {
       quantidade     : Integer;
       preco          : Decimal(10, 2);
 }
+
