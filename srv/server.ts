@@ -19,19 +19,16 @@ cds.on('bootstrap', (app) => {
 
     const PUBLIC_ROUTES = [
         { method: 'GET', path: '/v4/catalog/Products' },
+        { method: 'POST', path: '/v4/user/User' },
     ];
 
   
 
-    async function jwt_auth(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ) {
+    async function jwt_auth(req: Request, res: Response, next: NextFunction) {
         const authHeader = req.headers.authorization;
         const token = authHeader?.split(' ')[1]
-        console.log(req.path)
-       const isPublic = PUBLIC_ROUTES.some(
+       
+        const isPublic = PUBLIC_ROUTES.some(
             (r) => r.method === req.method && req.path.startsWith(r.path)
         );
 
@@ -111,8 +108,8 @@ cds.on('bootstrap', (app) => {
 
                 {
                     //algorithm: 'RS256',  vou implementar com chave
-                    subject: usuarioEncontrado.id,          // claim "sub"
-                    issuer: 'minha-api',       // clam "iss"
+                    subject: usuarioEncontrado.id,          // claim "sub
+                    issuer: 'minha-api',           // clam iss
                     expiresIn: '1h',
                 }
             );

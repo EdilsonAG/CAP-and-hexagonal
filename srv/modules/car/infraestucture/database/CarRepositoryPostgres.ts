@@ -12,7 +12,7 @@ export class CarRepositoryPostgres implements CarPersistencePort {
     try {
         const db = await cds.connect.to('db');
         const result = await db.run(
-            cds.ql.SELECT.from("app.ItemCarrinho").where({ carrinho_id: idCarrinho })
+            cds.ql.SELECT.from("app.ItemCarrinho").where( { carrinho_id: idCarrinho } )
         );
 
         if (!result) throw new Error("não encontrado");
@@ -24,27 +24,12 @@ export class CarRepositoryPostgres implements CarPersistencePort {
     }
 }
 
-    async selectCar(id: String): Promise<Carrinho | undefined> {
-        try {
-            const db = cds.connect.to('db');
-            const result = await db.run(
-                cds.ql.SELECT.one.from("app.Carrinho").where({ user_id: id })
-            )
-
-            if (result === undefined) throw new Error("não encontrado")
-
-            return result;
-
-        } catch (error) {
-
-        }
-    }
+   
 
     public async createCarrinho(car: Carrinho): Promise<void> {
 
         try {
-            console.log("\n\ncarrinho")
-            console.log(car.user?.id)
+            
             const db = await cds.connect.to('db');
             await db.run(
                 cds.ql.INSERT.into("app.Carrinho").entries(

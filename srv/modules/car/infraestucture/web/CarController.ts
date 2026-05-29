@@ -10,10 +10,11 @@ export class CarController {
 
     private addItemCarUseCase:AddItemCarUseCase;
     private carPersistencePort:CarPersistencePort;
-
+    private selectCarUseCase: SelectCarUseCase;
     constructor(){
         this.addItemCarUseCase = new AddItemCarInteractor()
         this.carPersistencePort = new CarRepositoryPostgres();
+        this.selectCarUseCase = new SelectCarInteractor();
     }
 
     registerHandlers(srv: any): void {
@@ -34,20 +35,20 @@ export class CarController {
         },
         
     ),
-    srv.on('READ', async(req:any)=>{
+
+    // rota Carrinho la na Service
+    srv.on('READ',  'Carrinho',async(req:any)=>{
             try {
 
                 const accestoken = req.headers.authorization?.split(' ')[1]
                 const decoded = jwt.decode(accestoken);
-              
-               
                 const idUser = decoded.id
-             
 
-                this.carPersistencePort.findCarByUser(idUser)
-                    console.log("testen possiblidade")
-            } catch (error) {
+                const ca = await this.selectCarUseCase.findItemCar(idUser)
                 
+                return ca
+            } catch (error:any) {
+                req.error(400, error.message);
             }
         })
     }

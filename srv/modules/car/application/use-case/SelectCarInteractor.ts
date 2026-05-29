@@ -12,11 +12,13 @@ export class SelectCarInteractor implements SelectCarUseCase {
     }
 
     public async findItemCar(id: string): Promise<Array<ItemCarrinho>> {
-        const carrinho = await this.carPersistencePort.selectCar(id);
+        const carrinho = await this.carPersistencePort.findCarByUser(id);
         if (carrinho?.id === undefined) {
             throw new Error("carrinho não encontrado");
         }
-        const itens: Array<ItemCarrinho> = await this.carPersistencePort.selectItemCar(carrinho?.id);
+        const itens = await this.carPersistencePort.selectItemCar(carrinho?.id);
+
+        
         return itens;
     }
 }

@@ -2,15 +2,15 @@ import { Product } from "../../../product/domain/product/entity/Product";
 import { Carrinho } from "./Carrinho";
 
 export class ItemCarrinho {
-    private _id: Number | undefined;
+    private _id: string | undefined;
     private _produto: Product | undefined;
     private _carrinho: Carrinho | undefined;
     private _quantidade: Number | undefined;
     
-    public get id(): Number | undefined {
+    public get id(): string | undefined {
         return this._id;
     }
-    public set id(value: Number | undefined) {
+    public set id(value: string | undefined) {
         this._id = value;
     }
 

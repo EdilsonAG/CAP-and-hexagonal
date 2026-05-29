@@ -2,14 +2,14 @@ import { User } from "../../../user/domain/user/entity/User";
 import { ItemCarrinho } from "./ItemCarrinho";
 
 export class Carrinho {
-    private _id: String | undefined;
+    private _id: string | undefined;
     private _user: User | undefined;
     private _itensCarrinho: Array<ItemCarrinho> = new Array<ItemCarrinho>;
 
-    public get id(): String | undefined {
+    public get id(): string | undefined {
         return this._id;
     }
-    public set id(value: String | undefined) {
+    public set id(value: string | undefined) {
         this._id = value;
     }
     public get user(): User | undefined {

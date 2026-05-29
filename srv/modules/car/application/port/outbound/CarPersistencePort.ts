@@ -6,6 +6,5 @@ export interface CarPersistencePort{
     createCarrinho(car:Carrinho): Promise<void>;
     findCarByUser(id_user: String): Promise<Carrinho | undefined>
     addItemCarrinho(itemCarrinho: ItemCarrinho):Promise<void>
-    selectCar(idUser:String):Promise<Carrinho | undefined>
- selectItemCar(idCarrinho: string): Promise<Array<ItemCarrinho >>
+     selectItemCar(idCarrinho: string): Promise<Array<ItemCarrinho >>
 }
