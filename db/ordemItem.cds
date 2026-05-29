@@ -10,5 +10,6 @@ entity OrderItem : managed {
       product_id     : Association to Product;
       quantidade     : Integer;
       preco          : Decimal(10, 2);
+      
 }
 

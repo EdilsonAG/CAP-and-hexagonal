@@ -1,5 +1,11 @@
 export class User{
-    private _id: Number | undefined;
+    private _id: string | undefined;
+    public get id(): string | undefined {
+        return this._id;
+    }
+    public set id(value: string | undefined) {
+        this._id = value;
+    }
     private _nome: String | undefined;
     private _email: String | undefined;
     private _senha: String | undefined;
@@ -26,10 +32,5 @@ export class User{
         this._nome = value;
     }
 
-    public get id(): Number | undefined {
-        return this._id;
-    }
-    public set id(value: Number | undefined) {
-        this._id = value;
-    }
+  
 }

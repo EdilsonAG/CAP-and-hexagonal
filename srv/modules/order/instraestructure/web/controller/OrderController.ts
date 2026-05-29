@@ -1,5 +1,7 @@
 import { CreateOrderUseCase } from "../../../application/ports/inbound/CreateOrderUseCase";
 import { CreateOrderInteractor } from "../../../application/use-case/CreateOrderInteractor";
+const jwt = require('jsonwebtoken');
+
 
 export class OrderController{
     private createOrderUseCase:CreateOrderUseCase;
@@ -8,16 +10,18 @@ export class OrderController{
     }
 
     registerHandlers(srv: any): void {
-        srv.on('CREATE', 'User', async (req: any) => {
+        srv.on('CREATE', 'Order', async (req: any) => {
             try {
+
+                 
+                const accestoken = req.headers.authorization?.split(' ')[1]
+                const decoded = jwt.decode(accestoken);
+              
+               
+                const idUser = decoded.id
                 // chamar use case
-                console.log("\n\n\n\n")
-                console.log("chegou no ordem")
-                const userId = req.user?.attr?.id;
-                console.log("\n\n\n\n")
-                console.log(userId)
-                console.log(req.data)
-                const id = await this.createOrderUseCase.createOrder();
+               
+                const id = await this.createOrderUseCase.createOrder(idUser);
                  return { ID: id, ...req.data };
             } catch (error: any) {
                 req.error(400, error.message)

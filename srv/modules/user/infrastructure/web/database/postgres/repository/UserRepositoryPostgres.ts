@@ -28,7 +28,7 @@ export class UserRepositoryPostgres implements UserPersistencePort {
 
     }
 
-    async findById(id: Number): Promise<User | undefined> {
+    async findById(id: string): Promise<User | undefined> {
         try {
             const result: User = await this.db.run(
                 cds.ql.SELECT.one.from('app.User').where({ id: id })

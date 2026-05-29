@@ -7,4 +7,5 @@ entity Order : managed {
   key  id: UUID;
   nomeOrdem: String;
   usuario : Association to User; 
+  itens          : Composition of many OrderItem on itens.order_id = $self;
  }
