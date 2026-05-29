@@ -8,6 +8,38 @@ import cds from '@sap/cds';
 
 export class CarRepositoryPostgres implements CarPersistencePort {
 
+    public async selectItemCar(idCarrinho: string): Promise<Array<ItemCarrinho>> {
+    try {
+        const db = await cds.connect.to('db');
+        const result = await db.run(
+            cds.ql.SELECT.from("app.ItemCarrinho").where({ carrinho_id: idCarrinho })
+        );
+
+        if (!result) throw new Error("não encontrado");
+
+        return result;
+
+    } catch (error: any) {
+        throw new Error(error.message);
+    }
+}
+
+    async selectCar(id: String): Promise<Carrinho | undefined> {
+        try {
+            const db = cds.connect.to('db');
+            const result = await db.run(
+                cds.ql.SELECT.one.from("app.Carrinho").where({ user_id: id })
+            )
+
+            if (result === undefined) throw new Error("não encontrado")
+
+            return result;
+
+        } catch (error) {
+
+        }
+    }
+
     public async createCarrinho(car: Carrinho): Promise<void> {
 
         try {
@@ -27,7 +59,7 @@ export class CarRepositoryPostgres implements CarPersistencePort {
 
     }
 
-    public async addItemCarrinho(itemCarrinho: ItemCarrinho):Promise<void> {
+    public async addItemCarrinho(itemCarrinho: ItemCarrinho): Promise<void> {
         try {
             const db = await cds.connect.to('db');
             console.log(itemCarrinho.carrinho?.id)
@@ -49,7 +81,7 @@ export class CarRepositoryPostgres implements CarPersistencePort {
         try {
 
             const db = await cds.connect.to("db")
-            const result:Carrinho = await db.run(
+            const result: Carrinho = await db.run(
                 cds.ql.SELECT.one.from("app.Carrinho").where({ user_id: id_user })
             )
             if (!result) {
