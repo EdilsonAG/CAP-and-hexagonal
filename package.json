@@ -19,6 +19,7 @@
     "@cap-js/sqlite": "^2",
     "@types/bcrypt": "^6.0.0",
     "@types/node": "^25.9.1",
+    "cds-swagger-ui-express": "^0.11.0",
     "ts-node": "^10.9.2",
     "tsx": "^4.22.3",
     "typescript": "^6.0.3"
@@ -33,6 +34,7 @@
   "private": true,
   "cds": {
     "requires": {
+       "api-docs": true,
       "auth": {
         "kind": "dummy"
       },

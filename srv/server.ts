@@ -15,11 +15,16 @@ import { PerfilRepositoryPostgres } from "./modules/user/infrastructure/web/data
 cds.on('bootstrap', (app) => {
     const findUserByEmail = new FindUserInteractor();
     const perfilRepositoryPostgres = new PerfilRepositoryPostgres();
+ 
+     const cds_swagger = require("cds-swagger-ui-express");
+    app.use(cds_swagger());
+
      app.use(require('express').json());
 
     const PUBLIC_ROUTES = [
         { method: 'GET', path: '/v4/catalog/Products' },
         { method: 'POST', path: '/v4/user/User' },
+       //  { method: 'GET', path: '/api-docs' },
     ];
 
   
@@ -37,6 +42,7 @@ cds.on('bootstrap', (app) => {
             return next();
         }
 
+           
         jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
             if (err) {
                 if (err.name === 'TokenExpiredError') {
