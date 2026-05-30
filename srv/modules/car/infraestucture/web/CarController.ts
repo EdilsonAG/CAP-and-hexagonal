@@ -9,11 +9,11 @@ const jwt = require('jsonwebtoken');
 export class CarController {
 
     private addItemCarUseCase:AddItemCarUseCase;
-    private carPersistencePort:CarPersistencePort;
+    
     private selectCarUseCase: SelectCarUseCase;
     constructor(){
         this.addItemCarUseCase = new AddItemCarInteractor()
-        this.carPersistencePort = new CarRepositoryPostgres();
+        
         this.selectCarUseCase = new SelectCarInteractor();
     }
 
@@ -22,19 +22,19 @@ export class CarController {
             try {
                 const { quantidade, idProduto } = req.data;
                 const accestoken = req.headers.authorization?.split(' ')[1]
-                const decoded = jwt.decode(accestoken);
-              
+                const decoded = await jwt.decode(accestoken);
+              console.log("ele não esta imprimindo aqui")
                
                 const idUser = decoded.id
                
                 const id = await this.addItemCarUseCase.addItemCar(quantidade,idProduto, idUser);
-                //return { ID: id, ...req.data };
+                 return { ID: id, ...req.data };
             } catch (error: any) {
                 req.error(400, error.message)
             }
-        },
+        }
         
-    ),
+    );
 
     // rota Carrinho la na Service
     srv.on('READ',  'Carrinho',async(req:any)=>{

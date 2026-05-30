@@ -19,9 +19,13 @@ export class AddItemCarInteractor implements AddItemCarUseCase{
         this.productPersistencePort = new ProductRepositoryPostgres();
     }
 
-    async addItemCar(quantidade: Number, id_produto: String, id_user: String) {
-        
+    async addItemCar(quantidade: number, id_produto: String, id_user: String) {
+        console.log("antes de encontrar")
         const product:Product | undefined = await this.productPersistencePort.findProductById(id_produto);
+        console.log("aqui ta chegando?")
+        if(product?.id === undefined){
+            throw new Error("Produto não existe")
+        }
 
         const carrinho:Carrinho |  undefined = await this.carPersistencePort.findCarByUser(id_user);
 
@@ -37,16 +41,7 @@ export class AddItemCarInteractor implements AddItemCarUseCase{
 
         await this.carPersistencePort.addItemCarrinho(itemCarrinho);
 
-        console.log("\n\n")
-        console.log("=====carrinho======")
-        console.log(product)
-        console.log(quantidade)
-        console.log(id_produto)
-        console.log(id_user)
-        console.log("=======itemcarrinho========")
-        console.log(itemCarrinho)
-        console.log("===========================")
-        console.log("\n\n")
+        
     }
 
 }

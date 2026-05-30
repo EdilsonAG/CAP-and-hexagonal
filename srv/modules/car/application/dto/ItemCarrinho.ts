@@ -5,7 +5,7 @@ export class ItemCarrinho {
     private _id: string | undefined;
     private _produto: Product | undefined;
     private _carrinho: Carrinho | undefined;
-    private _quantidade: Number | undefined;
+    private _quantidade: number | undefined;
     
     public get id(): string | undefined {
         return this._id;
@@ -21,10 +21,10 @@ export class ItemCarrinho {
         this._produto = value;
     }
 
-    public get quantidade(): Number | undefined {
+    public get quantidade(): number | undefined {
         return this._quantidade;
     }
-    public set quantidade(value: Number | undefined) {
+    public set quantidade(value: number | undefined) {
         this._quantidade = value;
     }
 

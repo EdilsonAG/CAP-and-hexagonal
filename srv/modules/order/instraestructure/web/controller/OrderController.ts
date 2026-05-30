@@ -13,7 +13,7 @@ export class OrderController{
         srv.on('CREATE', 'Order', async (req: any) => {
             try {
 
-                 
+                 console.log("chegou aqui ta bom")
                 const accestoken = req.headers.authorization?.split(' ')[1]
                 const decoded = jwt.decode(accestoken);
               
