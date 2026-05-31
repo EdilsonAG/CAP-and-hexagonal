@@ -1,5 +1,6 @@
 export class User{
     private _id: string | undefined;
+    private Status: String | undefined;
     public get id(): string | undefined {
         return this._id;
     }
